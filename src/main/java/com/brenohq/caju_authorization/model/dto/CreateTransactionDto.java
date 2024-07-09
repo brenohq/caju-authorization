@@ -11,6 +11,8 @@ public class CreateTransactionDto {
 
     private Account account;
 
+    private String accountId;
+
     private BigDecimal amount;
 
     private String mcc;
