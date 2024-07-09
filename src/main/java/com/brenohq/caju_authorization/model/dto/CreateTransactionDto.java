@@ -1,6 +1,7 @@
 package com.brenohq.caju_authorization.model.dto;
 
 
+import com.brenohq.caju_authorization.model.Account;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class CreateTransactionDto {
 
-    private String accountId;
+    private Account account;
 
     private BigDecimal amount;
 

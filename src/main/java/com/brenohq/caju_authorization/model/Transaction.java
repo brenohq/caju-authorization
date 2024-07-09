@@ -13,11 +13,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Transaction {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "account_id", nullable = false)
-    private String accountId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id", nullable = false)
+    private Account account;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
@@ -28,8 +29,8 @@ public class Transaction {
     @Column(name = "merchant", nullable = false)
     private String merchant;
 
-    public Transaction(String accountId, BigDecimal amount, String mcc, String merchant) {
-        this.accountId = accountId;
+    public Transaction(Account account, BigDecimal amount, String mcc, String merchant) {
+        this.account = account;
         this.amount = amount;
         this.mcc = mcc;
         this.merchant = merchant;
