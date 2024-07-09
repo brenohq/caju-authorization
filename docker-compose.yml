@@ -29,6 +29,8 @@ services:
       - POSTGRES_DB=$YOUR_DB_NAME
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "$LOCAL_POSTGRESQL_PORT:$DOCKER_POSTGRESQL_PORT"
 
 volumes:
   pgdata:
