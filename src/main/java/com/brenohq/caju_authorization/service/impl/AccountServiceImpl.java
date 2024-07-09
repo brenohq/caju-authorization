@@ -1,6 +1,8 @@
 package com.brenohq.caju_authorization.service.impl;
 
 import com.brenohq.caju_authorization.model.Account;
+import com.brenohq.caju_authorization.model.AuthorizationResponse;
+import com.brenohq.caju_authorization.model.Transaction;
 import com.brenohq.caju_authorization.model.dto.CreateAccountDto;
 import com.brenohq.caju_authorization.repository.AccountRepository;
 import com.brenohq.caju_authorization.service.AccountService;
@@ -20,6 +22,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAllAccounts() {
         return this.accountRepository.findAll();
+    }
+
+    @Override
+    public Account getAccountById(String accountId) {
+        return this.accountRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+    }
+
+    @Override
+    public AuthorizationResponse authorize(Account account, Transaction transaction) {
+        // TODO:
+        // - Implementar as regras de negócio L1, L2 e L3
+        // - Persistir as transactions no banco e os novos saldos
+        return new AuthorizationResponse("01");
     }
 
     @Override
