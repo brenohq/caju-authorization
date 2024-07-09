@@ -17,17 +17,15 @@ public class TransactionControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    void nonExistingRouteReturns404() throws Exception {
+    void transactionsReturnsLoadedData() throws Exception {
         mockMvc.perform(get("/transactions"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].accountId").value("01"))
+                .andExpect(jsonPath("$[0].account.accountId").value("1"))
                 .andExpect(jsonPath("$[0].amount").value(100.00))
                 .andExpect(jsonPath("$[0].mcc").value("5432"))
                 .andExpect(jsonPath("$[0].merchant").value("UBER"))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].accountId").value("02"))
+                .andExpect(jsonPath("$[1].account.accountId").value("2"))
                 .andExpect(jsonPath("$[1].amount").value(50.00))
                 .andExpect(jsonPath("$[1].mcc").value("5431"))
                 .andExpect(jsonPath("$[1].merchant").value("IFOOD"));
