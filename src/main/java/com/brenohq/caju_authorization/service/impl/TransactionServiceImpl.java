@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         Transaction transaction = Transaction.builder()
-                .accountId(dto.getAccountId())
+                .account(dto.getAccount())
                 .amount(dto.getAmount())
                 .mcc(dto.getMcc())
                 .merchant(dto.getMerchant())
