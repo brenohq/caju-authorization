@@ -10,3 +10,7 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Em relação a modelagem da entidade `Transaction`, optei por trabalhar com o valor financeiro sendo um `BigDecimal` que representará o valor total em centavos. Isso evita diversos erros de precisão que temos ao trabalhar com pontos flutuantes como `float` e `double`.
 - Configurei Docker/Docker Compose para facilitar uma futura execução em um cluster Kubernetes, e também para que o revisor do código não precise se preocupar com o setup do projeto localmente.
 
+## Dia 02 - terça-feira
+- Hoje modelei a entidade `Account` e criei o relacionamento com a classe `Transaction`.
+- Criei também as classes de service, repository e controller para lidar com a manipulação das operações com `Account`.
+- Pesquisei sobre padrões de arquitetura para lidar com pagamentos e cheguei no [CockroachDB](https://www.cockroachlabs.com/), que parece ser o que há de mais eficaz pra se usar em produção nesse cenário.
