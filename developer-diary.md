@@ -16,3 +16,10 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Pesquisei sobre padrões de arquitetura para lidar com pagamentos e cheguei no [CockroachDB](https://www.cockroachlabs.com/), que parece ser o que há de mais eficaz pra se usar em produção nesse cenário.
 - Atualizei a classe CreateTransactionDto para poder enviar o campo `"accountId"` na raiz do payload para `/authorize` ao invés de mandar algo do tipo `{ "account": { "accountId": "1" }, ... }`. Não sei se isso foi uma boa decisão, ou se eu deveria manter a modelagem de `Transaction` intacta. Decidi ir pelo payload de exemplo contido na especificação.
 - Criei o endpoint `/authorize` que receberá a transação a ser processada, e o método `authorize` na AccountService para implementar todas as validações propostas no desafio. Também fiquei em dúvida aqui sobre se deveria existir uma service específica para isso. Optei por implementar o método no `AccountService`, pois no final de tudo, a entidade `Account` é que será modificada no banco.
+
+## Dia 03 - quarta-feira
+- Hoje estruturei uma collection básica no Insomnia pra ajudar a testar e validar as minhas alterações.
+- Alterei o `DataLoader` para parar de criar transactions de teste no startup da aplicação.
+- Usei as classes `Function` e `BiConsumer` para criar o `BalanceMapper`, que implementa o de -> para de MCC -> saldos.
+- Implementei o item L1 do desafio no método `authorize` da `AccountServiceImpl`
+- Estudei como o [Stripe](https://docs.stripe.com/api/idempotent_requests) implementa idempotência nas suas chamadas de API.
