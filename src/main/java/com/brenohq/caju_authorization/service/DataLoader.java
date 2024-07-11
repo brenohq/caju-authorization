@@ -37,13 +37,5 @@ public class DataLoader {
             account2.setCashBalance(new BigDecimal("20.00"));
             accountRepository.save(account2);
         }
-
-        if (transactionRepository.findAll().isEmpty()) {
-            Account account1 = accountRepository.findByAccountId("1").orElseThrow(() -> new RuntimeException("Account not found: 1"));
-            Account account2 = accountRepository.findByAccountId("2").orElseThrow(() -> new RuntimeException("Account not found: 2"));
-
-            transactionRepository.save(new Transaction(account1, new BigDecimal("100.00"), "5432", "UBER"));
-            transactionRepository.save(new Transaction(account2, new BigDecimal("50.00"), "5431", "IFOOD"));
-        }
     }
 }
