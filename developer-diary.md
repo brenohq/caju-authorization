@@ -23,3 +23,8 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Usei as classes `Function` e `BiConsumer` para criar o `BalanceMapper`, que implementa o de -> para de MCC -> saldos.
 - Implementei o item L1 do desafio no método `authorize` da `AccountServiceImpl`
 - Estudei como o [Stripe](https://docs.stripe.com/api/idempotent_requests) implementa idempotência nas suas chamadas de API.
+
+## Dia 04 - quinta-feira
+- Refatorei o código para passar a usar Enums para os MCCs e para o código das respostas.
+- Implementei a lógica do fallback para o cash balance no `AccountServiceImpl`
+- Usei a annotation `@Transactional` do Spring Boot para evitar inconsistências durante a manipulação dos saldos.
