@@ -10,6 +10,7 @@ import com.brenohq.caju_authorization.repository.AccountRepository;
 import com.brenohq.caju_authorization.repository.TransactionRepository;
 import com.brenohq.caju_authorization.service.AccountService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
@@ -38,12 +39,11 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
     }
 
+    @Transactional
     @Override
     public AuthorizationResponse authorize(Account account, Transaction transaction) {
         // TODO:
-        // - Implementar as regras de negócio L2 e L3
-        // - Usar enums para lidar com códigos de resposta e MCCs conhecidos
-        // - Usar @Transactional
+        // - Implementar a regra de negócio L3
 
         BigDecimal transactionAmount = transaction.getAmount();
 
@@ -60,14 +60,19 @@ public class AccountServiceImpl implements AccountService {
 
         if (balance.compareTo(transactionAmount) >= 0) {
             setter.accept(account, balance.subtract(transactionAmount));
-
-            accountRepository.save(account);
-            transactionRepository.save(transaction);
-
-            return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
         } else {
-            return new AuthorizationResponse(ResponseCodeEnum.INSUFFICIENT_FUNDS.getCode());
+            BigDecimal cashBalance = account.getCashBalance();
+            if (cashBalance.compareTo(transactionAmount) >= 0) {
+                account.setCashBalance(cashBalance.subtract(transactionAmount));
+            } else {
+                return new AuthorizationResponse(ResponseCodeEnum.INSUFFICIENT_FUNDS.getCode());
+            }
         }
+
+        accountRepository.save(account);
+        transactionRepository.save(transaction);
+
+        return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
     }
 
     @Override
