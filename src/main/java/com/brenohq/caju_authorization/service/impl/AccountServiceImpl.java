@@ -1,5 +1,6 @@
 package com.brenohq.caju_authorization.service.impl;
 
+import com.brenohq.caju_authorization.constant.ResponseCodeEnum;
 import com.brenohq.caju_authorization.mapper.BalanceMapper;
 import com.brenohq.caju_authorization.model.Account;
 import com.brenohq.caju_authorization.model.AuthorizationResponse;
@@ -47,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
         BigDecimal transactionAmount = transaction.getAmount();
 
         if (transactionAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            return new AuthorizationResponse("07");
+            return new AuthorizationResponse(ResponseCodeEnum.ERROR.getCode());
         }
 
         String mcc = transaction.getMcc();
@@ -63,9 +64,9 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account);
             transactionRepository.save(transaction);
 
-            return new AuthorizationResponse("01");
+            return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
         } else {
-            return new AuthorizationResponse("51");
+            return new AuthorizationResponse(ResponseCodeEnum.INSUFFICIENT_FUNDS.getCode());
         }
     }
 

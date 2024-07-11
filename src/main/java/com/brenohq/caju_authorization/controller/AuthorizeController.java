@@ -1,5 +1,6 @@
 package com.brenohq.caju_authorization.controller;
 
+import com.brenohq.caju_authorization.constant.ResponseCodeEnum;
 import com.brenohq.caju_authorization.model.Account;
 import com.brenohq.caju_authorization.model.AuthorizationResponse;
 import com.brenohq.caju_authorization.model.Transaction;
@@ -39,7 +40,7 @@ public class AuthorizeController {
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new AuthorizationResponse("07"), HttpStatus.OK);
+            return new ResponseEntity<>(new AuthorizationResponse(ResponseCodeEnum.ERROR.getCode()), HttpStatus.OK);
         }
     }
 }
