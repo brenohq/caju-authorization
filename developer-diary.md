@@ -30,3 +30,9 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Usei a annotation `@Transactional` do Spring Boot para evitar inconsistências durante a manipulação dos saldos.
 - Posteriormente vou complementar a tabela `transaction` para conter de que saldo foi efetuada a operação, pois com a lógica de fallback pro cashbalance, essa informação passou a poder variar.
 - Implementei a regra de negócio L3 que define precedência maior para merchants conhecidos
+
+## Dia 05 - sexta-feira
+- Refatorei o nome de algumas variáveis de ambiente para melhor entendimento.
+- Escrevi o [README.md](README.md) com as instruções para a execução do projeto.
+- Implementei a regra de negócio L4, que consiste em usar chaves de idempotência. O client da aplicação passa a ser responsável por gerar UUIDs v4 e passa-los no payload da transaction a fim de garantir que apenas transações únicas poderão ser efetuadas.
+- Atualizei a [collection do Insomnia](insomnia-requests.json) para funcionar com chaves de idempotência dinâmicas.
