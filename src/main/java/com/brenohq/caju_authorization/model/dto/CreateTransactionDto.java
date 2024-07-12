@@ -5,6 +5,7 @@ import com.brenohq.caju_authorization.model.Account;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class CreateTransactionDto {
@@ -18,4 +19,6 @@ public class CreateTransactionDto {
     private String mcc;
 
     private String merchant;
+
+    private UUID idempotencyKey;
 }

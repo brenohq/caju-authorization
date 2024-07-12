@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -29,11 +30,15 @@ public class Transaction {
     @Column(name = "merchant", nullable = false)
     private String merchant;
 
-    public Transaction(Account account, BigDecimal amount, String mcc, String merchant) {
+    @Column(name = "idempotency_key", unique = true, nullable = false)
+    private UUID idempotencyKey;
+
+    public Transaction(Account account, BigDecimal amount, String mcc, String merchant, UUID idempotencyKey) {
         this.account = account;
         this.amount = amount;
         this.mcc = mcc;
         this.merchant = merchant;
+        this.idempotencyKey = idempotencyKey;
     }
 
 }
