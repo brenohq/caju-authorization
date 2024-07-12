@@ -14,6 +14,15 @@ jobs:
           - 5432:5432
           - 8080:8080
 
+    env:
+      YOUR_USERNAME: ${{ secrets.YOUR_USERNAME }}
+      YOUR_PASSWORD: ${{ secrets.YOUR_PASSWORD }}
+      YOUR_DB_NAME: ${{ secrets.YOUR_DB_NAME }}
+      LOCAL_PORT: ${{ secrets.LOCAL_PORT }}
+      DOCKER_PORT: ${{ secrets.DOCKER_PORT }}
+      LOCAL_POSTGRESQL_PORT: ${{ secrets.LOCAL_POSTGRESQL_PORT }}
+      DOCKER_POSTGRESQL_PORT: ${{ secrets.DOCKER_POSTGRESQL_PORT }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
