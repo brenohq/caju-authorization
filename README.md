@@ -27,8 +27,8 @@ DOCKER_POSTGRESQL_PORT=5432
 ```
 
 #### Run the following commands
-- `./mvnw clean install`
-- `./mvnw clean package`
+- `./mvnw clean install -DskipTests`
+- `./mvnw clean package -DskipTests`
 - `docker-compose up --build`
 
 #### Check if the application is running
