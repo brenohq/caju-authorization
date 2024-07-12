@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,6 +33,7 @@ public class AuthorizeControllerTests {
         transaction.setMcc("00");
         transaction.setAmount(new BigDecimal("1"));
         transaction.setMerchant("ZÉ DA ESQUINA");
+        transaction.setIdempotencyKey(UUID.randomUUID());
 
         mockMvc.perform(post("/authorize")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,6 +50,7 @@ public class AuthorizeControllerTests {
         transaction.setMcc("00");
         transaction.setAmount(new BigDecimal("200"));
         transaction.setMerchant("ZÉ DA ESQUINA");
+        transaction.setIdempotencyKey(UUID.randomUUID());
 
         mockMvc.perform(post("/authorize")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,6 +67,7 @@ public class AuthorizeControllerTests {
         transaction.setMcc("00");
         transaction.setAmount(new BigDecimal("-20"));
         transaction.setMerchant("ZÉ DA ESQUINA");
+        transaction.setIdempotencyKey(UUID.randomUUID());
 
         mockMvc.perform(post("/authorize")
                         .contentType(MediaType.APPLICATION_JSON)

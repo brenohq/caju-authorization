@@ -34,6 +34,7 @@ public class AuthorizeController {
                     .amount(transactionDto.getAmount())
                     .mcc(transactionDto.getMcc())
                     .merchant(transactionDto.getMerchant())
+                    .idempotencyKey(transactionDto.getIdempotencyKey())
                     .build();
 
             AuthorizationResponse response = accountService.authorize(account, transaction);
