@@ -7,12 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      docker:
-        image: docker:19.03.12
-        options: --privileged
+      db:
+        image: postgres:latest
         ports:
           - 5432:5432
-          - 8080:8080
+        env:
+          POSTGRES_USER: ${{ secrets.YOUR_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.YOUR_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.YOUR_DB_NAME }}
 
     env:
       YOUR_USERNAME: ${{ secrets.YOUR_USERNAME }}
@@ -51,8 +53,13 @@ jobs:
       - name: Build and push Docker images
         run: docker-compose -f docker-compose.yml up --build -d
 
-      - name: Wait for services to be ready
-        run: sleep 30
+      - name: Wait for DB to be ready
+        run: |
+          echo "Waiting for DB to be ready..."
+          while ! nc -z localhost ${{ secrets.LOCAL_POSTGRESQL_PORT }}; do
+            sleep 1
+          done
+          echo "DB is ready"
 
       - name: Run Spring Boot tests
         run: ./mvnw test

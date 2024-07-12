@@ -9,28 +9,27 @@ services:
     depends_on:
       - db
     environment:
-      - POSTGRES_USER=$YOUR_USERNAME
-      - POSTGRES_PASSWORD=$YOUR_PASSWORD
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/$YOUR_DB_NAME
-      - SPRING_DATASOURCE_USERNAME=$YOUR_USERNAME
-      - SPRING_DATASOURCE_PASSWORD=$YOUR_PASSWORD
+      - POSTGRES_USER=${YOUR_USERNAME}
+      - POSTGRES_PASSWORD=${YOUR_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${YOUR_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${YOUR_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${YOUR_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
     ports:
-      - "$LOCAL_PORT:$DOCKER_PORT"
+      - "${LOCAL_PORT}:${DOCKER_PORT}"
 
   db:
     image: postgres
     restart: always
     container_name: db
     environment:
-      - POSTGRES_USER=$YOUR_USERNAME
-      - POSTGRES_PASSWORD=$YOUR_PASSWORD
-      - POSTGRES_DB=$YOUR_DB_NAME
+      - POSTGRES_USER=${YOUR_USERNAME}
+      - POSTGRES_PASSWORD=${YOUR_PASSWORD}
+      - POSTGRES_DB=${YOUR_DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "$LOCAL_POSTGRESQL_PORT:$DOCKER_POSTGRESQL_PORT"
+      - "${LOCAL_POSTGRESQL_PORT}:${DOCKER_POSTGRESQL_PORT}"
 
 volumes:
   pgdata:
