@@ -39,6 +39,9 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
+      - name: Build the project
+        run: ./mvnw clean package
+
       - name: Build and push Docker images
         run: docker-compose -f docker-compose.yml up --build -d
 
