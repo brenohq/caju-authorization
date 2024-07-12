@@ -36,3 +36,8 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Escrevi o [README.md](README.md) com as instruções para a execução do projeto.
 - Implementei a regra de negócio L4, que consiste em usar chaves de idempotência. O client da aplicação passa a ser responsável por gerar UUIDs v4 e passa-los no payload da transaction a fim de garantir que apenas transações únicas poderão ser efetuadas.
 - Atualizei a [collection do Insomnia](insomnia-requests.json) para funcionar com chaves de idempotência dinâmicas.
+
+## Notas gerais
+- Foi um desafio e tanto. Aprendi muita coisa sobre o contexto de pagamentos, que é imenso por sinal. Tenho experiência em fintech, mas de um escopo totalmente distinto.
+- Eu poderia ter escrito testes unitários mais eficazes, que testassem os pedaços de lógica de cada módulo em si. Os testes que existem hoje requerem que a aplicação esteja rodando localmente e funcionam mais como E2E.
+- Sobre a regra de negócio L4, em um cenário de produção, com certeza o buraco é mais em baixo, devido a necessidade da base de dados estar distribuida, isso acarreta alguns problemas pra se lidar com as chaves de idempotência. Eu não consegui chegar a uma conclusão sobre como implementaria isso num sistema distribuido. Talvez um cluster de Redis distribuido dedicado a armazenar essas chaves, ou algo como o Apache Zookeeper para trabalhar com locks distribuidos.
