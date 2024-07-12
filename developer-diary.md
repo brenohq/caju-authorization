@@ -28,3 +28,5 @@ Nesse arquivo vou centralizar os pensamentos que tive e as decisões que tomei d
 - Refatorei o código para passar a usar Enums para os MCCs e para o código das respostas.
 - Implementei a lógica do fallback para o cash balance no `AccountServiceImpl`
 - Usei a annotation `@Transactional` do Spring Boot para evitar inconsistências durante a manipulação dos saldos.
+- Posteriormente vou complementar a tabela `transaction` para conter de que saldo foi efetuada a operação, pois com a lógica de fallback pro cashbalance, essa informação passou a poder variar.
+- Implementei a regra de negócio L3 que define precedência maior para merchants conhecidos
