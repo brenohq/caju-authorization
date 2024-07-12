@@ -25,11 +25,11 @@ public class BalanceMapper {
         balanceSetters.put(MccEnum.DEFAULT, Account::setCashBalance);
     }
 
-    public static Function<Account, BigDecimal> getGetter(String mcc) {
-        return balanceGetters.get(MccEnum.fromMcc(mcc));
+    public static Function<Account, BigDecimal> getGetter(MccEnum mcc) {
+        return balanceGetters.get(mcc);
     }
 
-    public static BiConsumer<Account, BigDecimal> getSetter(String mcc) {
-        return balanceSetters.get(MccEnum.fromMcc(mcc));
+    public static BiConsumer<Account, BigDecimal> getSetter(MccEnum mcc) {
+        return balanceSetters.get(mcc);
     }
 }
