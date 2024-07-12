@@ -1,7 +1,9 @@
 package com.brenohq.caju_authorization.service.impl;
 
+import com.brenohq.caju_authorization.constant.MccEnum;
 import com.brenohq.caju_authorization.constant.ResponseCodeEnum;
 import com.brenohq.caju_authorization.mapper.BalanceMapper;
+import com.brenohq.caju_authorization.mapper.MerchantMapper;
 import com.brenohq.caju_authorization.model.Account;
 import com.brenohq.caju_authorization.model.AuthorizationResponse;
 import com.brenohq.caju_authorization.model.Transaction;
@@ -42,37 +44,39 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public AuthorizationResponse authorize(Account account, Transaction transaction) {
-        // TODO:
-        // - Implementar a regra de negócio L3
 
         BigDecimal transactionAmount = transaction.getAmount();
 
+        // Impossible to transact 0 or negative values
         if (transactionAmount.compareTo(BigDecimal.ZERO) <= 0) {
             return new AuthorizationResponse(ResponseCodeEnum.ERROR.getCode());
         }
 
-        String mcc = transaction.getMcc();
+        // Getting balance type according to merchant name or mcc number
+        MccEnum mcc = getBalanceType(transaction.getMerchant(), transaction.getMcc());
 
         Function<Account, BigDecimal> getter = BalanceMapper.getGetter(mcc);
         BiConsumer<Account, BigDecimal> setter = BalanceMapper.getSetter(mcc);
 
         BigDecimal balance = getter.apply(account);
 
-        if (balance.compareTo(transactionAmount) >= 0) {
-            setter.accept(account, balance.subtract(transactionAmount));
-        } else {
-            BigDecimal cashBalance = account.getCashBalance();
-            if (cashBalance.compareTo(transactionAmount) >= 0) {
-                account.setCashBalance(cashBalance.subtract(transactionAmount));
-            } else {
-                return new AuthorizationResponse(ResponseCodeEnum.INSUFFICIENT_FUNDS.getCode());
-            }
+        // Account have enough balance to transact
+        if (canDeductFromBalance(account, setter, balance, transactionAmount)) {
+            accountRepository.save(account);
+            transactionRepository.save(transaction);
+            return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
         }
 
-        accountRepository.save(account);
-        transactionRepository.save(transaction);
+        // Fall backing to cash balance
+        BigDecimal cashBalance = account.getCashBalance();
+        if (canDeductFromBalance(account, Account::setCashBalance, cashBalance, transactionAmount)) {
+            accountRepository.save(account);
+            transactionRepository.save(transaction);
+            return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
+        }
 
-        return new AuthorizationResponse(ResponseCodeEnum.APPROVED.getCode());
+        // If can´t deduct from correct balance, neither the cash balance, responds with insufficient funds
+        return new AuthorizationResponse(ResponseCodeEnum.INSUFFICIENT_FUNDS.getCode());
     }
 
     @Override
@@ -89,5 +93,27 @@ public class AccountServiceImpl implements AccountService {
                 .build();
 
         accountRepository.save(account);
+    }
+
+    private MccEnum getBalanceType(String merchant, String mcc) {
+        // Gets the correct balance type from known merchants list
+        MccEnum mccType = MerchantMapper.getBalanceType(merchant);
+
+        // If the merchant isn´t in the list, defaults to transaction payload mcc
+        if (mccType == MccEnum.DEFAULT) {
+            mccType = MccEnum.fromMcc(mcc);
+        }
+
+        return mccType;
+    }
+
+    private boolean canDeductFromBalance(Account account, BiConsumer<Account, BigDecimal> setter, BigDecimal balance, BigDecimal amount) {
+        // Re-utilizing logic to compare balances with transaction amount
+        if (balance.compareTo(amount) >= 0) {
+            setter.accept(account, balance.subtract(amount));
+            return true;
+        }
+
+        return false;
     }
 }
