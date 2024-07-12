@@ -17,6 +17,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -44,6 +45,11 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public AuthorizationResponse authorize(Account account, Transaction transaction) {
+        // Ensuring /authorize idempotency
+        UUID idempotencyKey = transaction.getIdempotencyKey();
+        if (idempotencyKey == null || transactionRepository.findByIdempotencyKey(idempotencyKey).isPresent()) {
+            return new AuthorizationResponse(ResponseCodeEnum.ERROR.getCode());
+        }
 
         BigDecimal transactionAmount = transaction.getAmount();
 
